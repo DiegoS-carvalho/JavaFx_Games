@@ -1,5 +1,6 @@
 package br.ds.senac.gamesfx;
 
+import br.ds.senac.gamesfx.ui.home.PainelHome;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -73,10 +74,11 @@ public class TelaPrincipal extends Application {
         stage.show();
 
         //====================Enfeitando o site==================
+        //Nao deu pra anotar mexi o codiogo tudo
 
+       PainelHome painelHome = new PainelHome();
 
-
-
+    raiz.setCenter(painelHome.criarPainelHome());
     }
     private Button criarBotaoMenu(String textoDoBotao){
        Button button = new Button(textoDoBotao);
@@ -98,6 +100,8 @@ public class TelaPrincipal extends Application {
             button.setOnMouseExited(e ->{
                 button.setStyle("-fx-background-Color: " + COR_PADRAO);});
             };
+
         }
    }
+
 
