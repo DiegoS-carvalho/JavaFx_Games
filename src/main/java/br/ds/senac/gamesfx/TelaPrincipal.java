@@ -1,6 +1,7 @@
 package br.ds.senac.gamesfx;
 
 import br.ds.senac.gamesfx.ui.home.PainelHome;
+import br.ds.senac.gamesfx.ui.jogos.PainelJogos;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -45,12 +46,20 @@ public class TelaPrincipal extends Application {
         // ================Botões=========================
 
         Button btnJogos = criarBotaoMenu("Jogos");
+        btnJogos.setOnAction(clicadinha ->{PainelJogos painelJogos = new PainelJogos();
+            raiz.setCenter(painelJogos.criarPainelJogos());
+
+        });
 
         Button btnPlataformas = criarBotaoMenu("Plataformas");
 
         Button btnEstudios = criarBotaoMenu("Estudios");
 
         Button btnHome = criarBotaoMenu("Home");
+        btnHome.setOnAction(clicadinha ->{PainelHome painelHome = new PainelHome();
+            raiz.setCenter(painelHome.criarPainelHome());
+
+        });
         aplicarEfeitoHover(btnJogos,btnHome,btnEstudios,btnPlataformas);
         //======================Vincular botão ao painel lateral=========================
 
