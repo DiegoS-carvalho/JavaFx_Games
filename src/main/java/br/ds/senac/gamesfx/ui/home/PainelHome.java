@@ -56,7 +56,7 @@ public class PainelHome {
 
         Label lblDisc = new Label("Software para gestão");
         lblDisc.setStyle(
-                "-fx-font-weight: regular; " +
+                " " +
                         "-fx-font-size: 30; " +
                         "-fx-text-fill: #C2B98A"
         );

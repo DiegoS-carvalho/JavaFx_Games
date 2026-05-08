@@ -46,8 +46,10 @@ public class TelaPrincipal extends Application {
         // ================Botões=========================
 
         Button btnJogos = criarBotaoMenu("Jogos");
-        btnJogos.setOnAction(clicadinha ->{PainelJogos painelJogos = new PainelJogos();
+        btnJogos.setOnAction(clicadinha ->{
+            PainelJogos painelJogos = new PainelJogos(stage);
             raiz.setCenter(painelJogos.criarPainelJogos());
+
 
         });
 
