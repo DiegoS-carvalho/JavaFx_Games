@@ -12,6 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.tableview2.filter.filtereditor.SouthFilter;
+
+import javax.swing.*;
 
 public class PainelJogos {
     private  static final  String COR_PADRAO = "#6E6A5A;"+"-fx-text-fill: black;"+
@@ -58,21 +61,21 @@ public class PainelJogos {
 
         TableColumn<Jogo, Integer> colunaId = new TableColumn("ID");
         colunaId.setCellValueFactory(new PropertyValueFactory<>("id"));
-//        colunaId.setStyle("-fx-text-fill:#000000;");
+        colunaId.setStyle("-fx-text-fill:#D8C79A;");
         colunaId.setPrefWidth(50);
         colunaId.setMaxWidth(50);
         colunaId.setResizable(false);
 
         TableColumn<Jogo, String> colunaTitulo = new TableColumn("TÍTULO");
         colunaTitulo.setCellValueFactory(new PropertyValueFactory<>("titulo"));
-        colunaTitulo.setStyle("-fx-text-fill:#000000;");
+        colunaTitulo.setStyle("-fx-text-fill:#D8C79A;");
         colunaTitulo.setPrefWidth(400);
         colunaTitulo.setMaxWidth(400);
         colunaTitulo.setResizable(false);
 
         TableColumn<Jogo, String> colunaPlataforma = new TableColumn("PLATAFORMA");
         colunaPlataforma.setCellValueFactory(new PropertyValueFactory<>("plataforma"));
-        colunaPlataforma.setStyle("-fx-text-fill:#000000;");
+        colunaPlataforma.setStyle("-fx-text-fill:#D8C79A;");
         colunaPlataforma.setPrefWidth(200);
         colunaPlataforma.setMaxWidth(200);
         colunaPlataforma.setResizable(false);
@@ -87,20 +90,50 @@ public class PainelJogos {
 
 
         tabelaJogos.getColumns().addAll(colunaId,colunaTitulo, colunaPlataforma);
-        tabelaJogos.setStyle("-fx-background-color:  #23272A; ");
+        tabelaJogos.setStyle(
+
+                        "-fx-background-color: #23272A;" +
+                                "-fx-control-inner-background: #23272A;" +
+                                "-fx-table-cell-border-color: transparent;"
+
+);
 
 
         HBox botoes = new HBox(30);
         botoes.setPadding(new Insets(20,0,0,20));
         botoes.setAlignment(Pos.BASELINE_RIGHT);
+
         Button btnAdd =  criarBotao("Adicionar", "/imagens/save.png");
+
         btnAdd.setOnAction(e->{
             TelaJogo telaJogo = new TelaJogo();
             telaJogo.criarTela(stage);
+            tabelaJogos.setItems(repository.getJogos());
         });
+
+
+
         Button btnView =  criarBotao("Ver", "/imagens/view.png");
+
+
+
         Button btnEdit =  criarBotao("Editar", "/imagens/edit.png");
+
+
+
         Button btnApagar =  criarBotao("Deletar", "/imagens/trash1.png");
+        btnApagar.setOnAction(e-> {
+                    Jogo jogoExcluir = tabelaJogos.getSelectionModel().getSelectedItem();
+                    int resultado = repository.excluir(jogoExcluir.getId());
+                    if (resultado > 0) {
+            JOptionPane.showMessageDialog(null,"Jogo excluido com sucesso");
+
+
+
+
+                }
+            });
+
 
     botoes.getChildren().addAll(btnAdd,btnView,btnEdit,btnApagar);
         //========================================================================================\\

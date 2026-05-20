@@ -5,16 +5,20 @@ import java.time.LocalDate;
 public class Jogo {
     private int id;
     private String titulo;
+    private String plataforma;
+    private String estudio;
+    private String categoria;
     private double preco;
     private LocalDate DataLancamento;
-    private String estudio;
-    private String plataforma;
     private boolean finalizado;
 
     public Jogo(int id, String titulo, String plataforma){
         this.id = id;
         this.titulo = titulo;
         this.plataforma = plataforma;
+    }
+
+    public Jogo() {
     }
 //===========================================================\\
 
@@ -77,6 +81,13 @@ public class Jogo {
         this.finalizado = finalizado;
     }
 //===========================================================\\
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
 
 
 }
