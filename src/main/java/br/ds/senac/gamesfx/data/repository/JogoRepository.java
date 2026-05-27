@@ -62,7 +62,7 @@ public class JogoRepository {
         String sql = "INSERT INTO tb_games (titulo, plataforma,estudio, categoria, preco, data_lancamento," +
                 " finalizado)" +
                 "VALUES(?,?,?,?,?,?,?)";
-        //Preparar a instrução sql para o db através da conexão
+        //Preparar a instrução sql para o db através da conexão,
         try {
 
         PreparedStatement stm = ConexaoSQLite.getConexao().prepareStatement(sql);
@@ -83,24 +83,38 @@ public class JogoRepository {
         }
     }
 
-    public int excluir(int id){
-        String sql = "DELETE FROM tb_games WHERE id = ?;";
+    public int excluir(int id) {
+        return 0;
+    }
+
+    public void editar(Jogo jogo) {
+        String sql =
+                "UPDATE tb_games SET" +
+                        " titulo = ?," +
+                        "plataforma = ?," +
+                        "estudio = ?," +
+                        "categoria = ?," +
+                        "preco = ?," +
+                        "data_lancamento = ?," +
+                        "finalizado = ?" +
+                        " WHERE  id = ?;";
 
         try {
-            PreparedStatement stm = ConexaoSQLite
-                    .getConexao().
-                    prepareStatement(sql);
-            stm.setInt(1,id);
-
-            int resultado = stm.executeUpdate();
+            PreparedStatement stm = ConexaoSQLite.getConexao().prepareStatement(sql);
+            stm.setString(1, jogo.getTitulo());
+            stm.setString(2, jogo.getPlataforma());
+            stm.setString(3, jogo.getEstudio());
+            stm.setString(4, jogo.getCategoria());
+            stm.setDouble(5, jogo.getPreco());
+            stm.setString(6, jogo.getDataLancamento().toString());
+            stm.setInt(7, jogo.isFinalizado() ? 1 : 0);
+            stm.setInt(8,jogo.getId());
+            stm.executeUpdate();
             ConexaoSQLite.fecharConexao();
-
-            return resultado;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return 0;
+        } catch (SQLException erro) {
+            System.out.println("Ocorreu um erro na gravação.");
+            erro.printStackTrace();
         }
-
-
     }
 }
+

@@ -19,19 +19,28 @@ import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.time.LocalDate;
-
+import java.util.Optional;
 
 public class TelaJogo {
 
-    private TextField tfId;
-    private TextField tfTitulo;
-    private TextField tfValor;
-    private ComboBox<String> comboPlataforma;
-    private ComboBox<String> comboEstudio;
-    private DatePicker dpDataLancamento;
-    private CheckBox cbFinalizado;
+    private TextField tfId = new TextField();
+    private TextField tfTitulo = new TextField();
+    private TextField tfValor = new TextField();
+    private ComboBox<String> comboPlataforma = new ComboBox<>();
+    private ComboBox<String> comboEstudio = new ComboBox<>();
+    private DatePicker dpDataLancamento = new DatePicker();
+    private CheckBox cbFinalizado = new CheckBox("Finalizado");
 
-
+public  TelaJogo(){}
+    public TelaJogo(Jogo jogo){
+    tfId.setText(String.valueOf(jogo.getId()));
+    tfTitulo.setText(jogo.getTitulo());
+    tfValor.setText(String.valueOf(jogo.getPreco()));
+    comboPlataforma.setValue(jogo.getPlataforma());
+    comboEstudio.setValue(jogo.getEstudio());
+    dpDataLancamento.setValue(jogo.getDataLancamento());
+    cbFinalizado.setSelected(jogo.isFinalizado());
+    }
     public void criarTela(Stage stagePai){
         Stage stage = new Stage();
         stage.initOwner(stagePai);
@@ -47,18 +56,11 @@ public class TelaJogo {
         raiz.setBottom(criarRodape(stage));
         Scene cena = new Scene(raiz,500,550);
 
-
         stage.setHeight(550);
         stage.setWidth(500);
         stage.setResizable(false);
         stage.setScene(cena);
         stage.showAndWait();
-
-
-
-
-
-
 
     }
     public HBox criarPainelTitulo(){
@@ -85,7 +87,6 @@ public class TelaJogo {
 
         return painelTitulo;
     }
-
     private VBox criarFormulario(){
 
         ObservableList<String> plataformas = FXCollections
@@ -94,7 +95,7 @@ public class TelaJogo {
                 );
         ObservableList<String> estudios = FXCollections
                 .observableArrayList(
-                        "Rockstar Games", "Naughty Dog", "Ubisoft", "Electronic Arts", "Capcom", "Square Enix", "Bethesda", "Nintendo", "Insomniac Games", "FromSoftware"
+                        "Tt Games" ,"Rockstar Games", "Naughty Dog", "Ubisoft", "Electronic Arts", "Capcom", "Square Enix", "Bethesda", "Nintendo", "Insomniac Games", "FromSoftware"
                 );
 
         VBox formulario = new VBox();
@@ -108,28 +109,28 @@ public class TelaJogo {
         //Criar os componentes para a grid
 
         Label lblid = new Label("ID: ");
-        tfId = new TextField();
+//        tfId = new TextField();
         tfId.setEditable(false);
         tfId.setDisable(true);
 
         Label lblTitulo = new Label("Título: ");
-        tfTitulo = new TextField();
+//        tfTitulo = new TextField();
         tfTitulo.setPromptText("Ex. Lego Batman II");
 
         Label lblPlataformas = new Label("Plataforma: ");
-        comboPlataforma = new ComboBox<>(plataformas);
+        comboPlataforma.setItems(plataformas);
 
         Label lblEstudios = new Label("Estudio: ");
-        comboEstudio = new ComboBox<>(estudios);
+        comboEstudio.setItems(estudios);
 
         Label lblValor = new Label("Valor: ");
-        tfValor = new TextField();
+//        tfValor = new TextField();
         tfValor.setPromptText("Ex. 9,99");
 
         Label lblLancamento = new Label("Data de Lançamento: ");
-        dpDataLancamento = new DatePicker(LocalDate.now());
+//        dpDataLancamento = new DatePicker(LocalDate.now());
 
-        cbFinalizado = new CheckBox("Finalizado?");
+
 
         //adicionar na grid
         gridFormulario.add(lblid,0,0);
@@ -174,8 +175,8 @@ public class TelaJogo {
         return botao;
     }
     private HBox criarRodape(Stage stage){
-        HBox rodape = new HBox();
 
+        HBox rodape = new HBox();
         rodape.setPadding(new Insets (10,5,10,10));
         rodape.setStyle("-fx-background-color:#6B6D70 ; ");
 
@@ -200,38 +201,41 @@ public class TelaJogo {
 
             // Criar o repositório para enviar o jogo
             JogoRepository repository = new JogoRepository();
-            repository.salvar(jogo);
-//            JOptionPane.showMessageDialog(
-//                    null,
-//                    "Jogo cadastrado com sucesso!",
-//                    "Erro",
-//                    JOptionPane.ERROR_MESSAGE
-//            );
-            int resposta = JOptionPane.showConfirmDialog(
-                    null,
-                    "Jogo cadastrado com sucesso!\nDeseja cadastrar outro jogo?",
-                    "cadastro",
-                    JOptionPane.YES_NO_OPTION
+            if (tfId.getText().equals("")){
+                repository.salvar(jogo);
+
+                Alert mensagemSalvar = new Alert(Alert.AlertType.CONFIRMATION);
+                mensagemSalvar.setTitle("cadastro de jogos");
+                mensagemSalvar.setHeaderText("o jogo foi gravado com sucesso");
+                mensagemSalvar.setContentText("deseja cadastrar outro jogo?");
+
+                Optional<ButtonType> escolhaCadastra = mensagemSalvar.showAndWait();
+
+                if(escolhaCadastra.get() == ButtonType.OK){
+                    limparCampos();
+
+                }else {
+                    stage.close();
+                }
 
 
+            }else{
+                jogo.setId(Integer.parseInt(tfId.getText()));
+                repository.editar(jogo);
 
-            );
-            if(resposta != 0){
-            stage.close();
+                Alert mensagemEditar = new Alert(Alert.AlertType.INFORMATION);
+                mensagemEditar.setTitle("Editar Jogo");
+                mensagemEditar.setHeaderText("o jogo foi editado com sucesso");
+                mensagemEditar.showAndWait();
+
+                    stage.close();
+
             }
                 limparCampos();
-
         });
-
-
-
-
         rodape.getChildren().addAll(btnSalvar, btnApagar);
-
-
         return rodape;
     }
-
     private void limparCampos() {
 
         tfTitulo.clear();
