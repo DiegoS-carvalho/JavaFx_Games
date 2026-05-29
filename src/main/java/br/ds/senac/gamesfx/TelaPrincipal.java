@@ -2,6 +2,7 @@ package br.ds.senac.gamesfx;
 
 import br.ds.senac.gamesfx.ui.home.PainelHome;
 import br.ds.senac.gamesfx.ui.jogos.PainelJogos;
+import br.ds.senac.gamesfx.ui.plataformas.PainelPlataformas;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -54,6 +55,10 @@ public class TelaPrincipal extends Application {
         });
 
         Button btnPlataformas = criarBotaoMenu("Plataformas");
+        btnPlataformas.setOnAction((clicadinha ->{
+            PainelPlataformas painelPlataformas = new PainelPlataformas(stage);
+            raiz.setCenter((painelPlataformas.criarPainelPlataformas()));
+        }));
 
         Button btnEstudios = criarBotaoMenu("Estudios");
 
