@@ -4,10 +4,12 @@ import br.ds.senac.gamesfx.data.repository.PlataformaRepository;
 import br.ds.senac.gamesfx.model.Jogo;
 import br.ds.senac.gamesfx.model.Plataforma;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -78,8 +80,39 @@ public class PainelPlataformas {
 
         );
 
-        painelPlataformas.getChildren().addAll(lblTitulo,new Separator(), tabelaPlataformas);
 
+
+
+        HBox botoes = new HBox(30);
+        botoes.setPadding(new Insets(20,0,0,20));
+        botoes.setAlignment(Pos.BASELINE_RIGHT);
+
+        Button btnAdd =  criarBotao("Adicionar", "/imagens/save.png");
+
+        btnAdd.setOnAction(e->{
+
+        });
+
+        Button btnView =  criarBotao("Ver", "/imagens/view.png");
+
+        Button btnEdit =  criarBotao("Editar", "/imagens/edit.png");
+        btnEdit.setOnAction(e ->{
+
+
+
+
+        });
+
+
+        Button btnApagar =  criarBotao("Deletar", "/imagens/trash1.png");
+        btnApagar.setOnAction(e-> {
+
+
+        });
+
+
+        botoes.getChildren().addAll(btnAdd,btnView,btnEdit,btnApagar);
+        painelPlataformas.getChildren().addAll(lblTitulo,new Separator(), tabelaPlataformas,botoes);
         return  painelPlataformas;
     }
     private Button criarBotao(String textoBotao, String urlImg){

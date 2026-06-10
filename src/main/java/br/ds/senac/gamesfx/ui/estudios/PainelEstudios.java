@@ -84,11 +84,7 @@ public PainelEstudios(Stage stage) {this.stage = stage;}
 
         });
 
-
-
         Button btnView =  criarBotao("Ver", "/imagens/view.png");
-
-
 
         Button btnEdit =  criarBotao("Editar", "/imagens/edit.png");
         btnEdit.setOnAction(e ->{
