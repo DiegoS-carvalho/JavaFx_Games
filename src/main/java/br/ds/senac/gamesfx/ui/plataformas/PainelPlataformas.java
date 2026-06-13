@@ -47,7 +47,7 @@ public class PainelPlataformas {
         colunaId.setResizable(false);
 
         TableColumn<Plataforma,String> colunaTitulo = new TableColumn<>("PLATAFORMA");
-        colunaTitulo.setCellValueFactory(new PropertyValueFactory<>("Plataforma"));        
+        colunaTitulo.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colunaTitulo.setStyle("-fx-text-fill:#D8C79A;");
         colunaTitulo.setPrefWidth(400);
         colunaTitulo.setMaxWidth(400);

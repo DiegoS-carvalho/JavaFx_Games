@@ -34,6 +34,9 @@ public PainelEstudios(Stage stage) {this.stage = stage;}
         lblTitulo.setStyle( "-fx-font-size: 36; " +
                 "-fx-font-weight: bold; " +
                 "-fx-text-fill:#C2B98A;");
+
+
+
         //agora entra a tabela de estudios
         TableView<Estudio> tabelaEstudios = new TableView<>();
         VBox.setVgrow(tabelaEstudios, Priority.ALWAYS);
@@ -48,14 +51,14 @@ public PainelEstudios(Stage stage) {this.stage = stage;}
         colunaId.setResizable(false);
 
         TableColumn<Estudio, String> colunaNomeE = new TableColumn("ESTUDIO");
-        colunaNomeE.setCellValueFactory(new PropertyValueFactory<>("Nome do Estudio"));
+        colunaNomeE.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colunaNomeE.setStyle("-fx-text-fill:#D8C79A;");
         colunaNomeE.setPrefWidth(400);
         colunaNomeE.setMaxWidth(400);
         colunaNomeE.setResizable(false);
 
         TableColumn<Estudio, String> colunaFundador = new TableColumn("FUNDADOR");
-        colunaFundador.setCellValueFactory(new PropertyValueFactory<>("Nome do Fundador"));
+        colunaFundador.setCellValueFactory(new PropertyValueFactory<>("nomeFundador"));
         colunaFundador.setStyle("-fx-text-fill:#D8C79A;");
         colunaFundador.setPrefWidth(200);
         colunaFundador.setMaxWidth(200);
@@ -89,11 +92,7 @@ public PainelEstudios(Stage stage) {this.stage = stage;}
         Button btnEdit =  criarBotao("Editar", "/imagens/edit.png");
         btnEdit.setOnAction(e ->{
 
-
-
-
         });
-
 
         Button btnApagar =  criarBotao("Deletar", "/imagens/trash1.png");
         btnApagar.setOnAction(e-> {

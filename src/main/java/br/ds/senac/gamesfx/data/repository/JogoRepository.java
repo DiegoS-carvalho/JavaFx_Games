@@ -15,7 +15,22 @@ import java.time.LocalDate;
 public class JogoRepository {
     public ObservableList<Jogo> getJogos() {
 
-        String sql = "SELECT * FROM tb_games";
+        String sql = "SELECT" +
+                "    g.id," +
+                "    g.titulo," +
+                "    g.plataforma," +
+                "    p.nome AS nome_plataforma," +
+                "    g.categoria," +
+                "    g.preco," +
+                "    g.data_lancamento," +
+                "    g.finalizado," +
+                "    p.id AS plataforma_id," +
+                "    e.nome AS estudio " +
+                "FROM tb_games AS g " +
+                "INNER JOIN tb_plataformas AS p " +
+                "    ON g.plataforma = p.id " +
+                "INNER JOIN tb_estudio AS e " +
+                "    ON g.estudio = e.id;";
 
         ObservableList<Jogo> listaJogos = FXCollections.observableArrayList();
 

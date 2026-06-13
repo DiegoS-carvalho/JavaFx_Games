@@ -81,6 +81,12 @@ public class PainelJogos {
         colunaPlataforma.setMaxWidth(200);
         colunaPlataforma.setResizable(false);
 
+        TableColumn<Jogo, String> colunaEstudio = new TableColumn("Estúdio");
+        colunaPlataforma.setCellValueFactory(new PropertyValueFactory<>("estudio"));
+        colunaPlataforma.setStyle("-fx-text-fill:#D8C79A;");
+        colunaPlataforma.setPrefWidth(200);
+        colunaPlataforma.setMaxWidth(200);
+        colunaPlataforma.setResizable(false);
 
 
     //import dos dados da tabela================================================================\\
@@ -90,7 +96,7 @@ public class PainelJogos {
     //========================================================================================\\
 
 
-        tabelaJogos.getColumns().addAll(colunaId,colunaTitulo, colunaPlataforma);
+        tabelaJogos.getColumns().addAll(colunaId,colunaTitulo, colunaPlataforma, colunaEstudio);
         tabelaJogos.setStyle(
 
                         "-fx-background-color: #23272A;" +

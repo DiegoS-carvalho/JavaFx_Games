@@ -1,6 +1,8 @@
 package br.ds.senac.gamesfx.ui.jogos;
 
+import br.ds.senac.gamesfx.data.repository.EstudioRepository;
 import br.ds.senac.gamesfx.data.repository.JogoRepository;
+import br.ds.senac.gamesfx.model.Estudio;
 import br.ds.senac.gamesfx.model.Jogo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -27,9 +29,10 @@ public class TelaJogo {
     private TextField tfTitulo = new TextField();
     private TextField tfValor = new TextField();
     private ComboBox<String> comboPlataforma = new ComboBox<>();
-    private ComboBox<String> comboEstudio = new ComboBox<>();
+    private ComboBox<Estudio> comboEstudio = new ComboBox<>();
     private DatePicker dpDataLancamento = new DatePicker();
     private CheckBox cbFinalizado = new CheckBox("Finalizado");
+    EstudioRepository repoEstudio = new EstudioRepository();
 
 public  TelaJogo(){}
     public TelaJogo(Jogo jogo){
@@ -37,7 +40,7 @@ public  TelaJogo(){}
     tfTitulo.setText(jogo.getTitulo());
     tfValor.setText(String.valueOf(jogo.getPreco()));
     comboPlataforma.setValue(jogo.getPlataforma());
-    comboEstudio.setValue(jogo.getEstudio());
+    comboEstudio.setItems(repoEstudio.getEstudios());
     dpDataLancamento.setValue(jogo.getDataLancamento());
     cbFinalizado.setSelected(jogo.isFinalizado());
     }
@@ -93,10 +96,7 @@ public  TelaJogo(){}
                 .observableArrayList(
                         "PlayStation 1", "PlayStation 2", "PlayStation 3", "PlayStation 4", "PlayStation 5", "Xbox", "Xbox 360", "Xbox One", "Xbox Series X", "Xbox Series S", "NES", "SNES", "Nintendo 64", "GameCube", "Wii", "Wii U", "Nintendo Switch", "Sega Master System", "Sega Mega Drive", "Sega Saturn", "Sega Dreamcast"
                 );
-        ObservableList<String> estudios = FXCollections
-                .observableArrayList(
-                        "Tt Games" ,"Rockstar Games", "Naughty Dog", "Ubisoft", "Electronic Arts", "Capcom", "Square Enix", "Bethesda", "Nintendo", "Insomniac Games", "FromSoftware"
-                );
+
 
         VBox formulario = new VBox();
         formulario.setPadding(new Insets(10));
@@ -121,7 +121,7 @@ public  TelaJogo(){}
         comboPlataforma.setItems(plataformas);
 
         Label lblEstudios = new Label("Estudio: ");
-        comboEstudio.setItems(estudios);
+        comboEstudio.setItems(repoEstudio.getEstudios());
 
         Label lblValor = new Label("Valor: ");
 //        tfValor = new TextField();
@@ -193,7 +193,7 @@ public  TelaJogo(){}
             Jogo jogo = new Jogo();
             jogo.setTitulo(tfTitulo.getText());
             jogo.setPlataforma(comboPlataforma.getValue());
-            jogo.setEstudio(comboEstudio.getValue());
+            jogo.setEstudio(comboEstudio.getValue().getNome());
             jogo.setDataLancamento(dpDataLancamento.getValue());
             jogo.setCategoria("Jogo");
             jogo.setFinalizado(cbFinalizado.isSelected());
@@ -240,7 +240,7 @@ public  TelaJogo(){}
 
         tfTitulo.clear();
         tfValor.clear();
-        comboEstudio.setValue(" ");
+        comboEstudio.setItems(null);
         comboPlataforma.setValue(" ");
         cbFinalizado.setSelected(false);
         dpDataLancamento.setValue(LocalDate.now());

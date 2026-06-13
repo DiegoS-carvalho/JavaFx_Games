@@ -6,9 +6,7 @@ public class Jogo {
     private int id;
     private String titulo;
     private String plataforma;
-
-    private Estudio estudio;
-
+    private String estudio;
     private String categoria;
     private double preco;
     private LocalDate DataLancamento;
@@ -59,11 +57,11 @@ public class Jogo {
     }
 // ===========================================================\\
 
-    public Estudio getEstudio() {
+    public String getEstudio() {
         return estudio;
     }
 
-    public void setEstudio(Estudio estudio) {
+    public void setEstudio(String estudio) {
         this.estudio = estudio;
     }
 //===========================================================\\

@@ -27,11 +27,11 @@ public class EstudioRepository {
                 String nomeEstudio = rs.getString("nome");
                 String nomeFundador = rs.getString("nomeFundador");
                 String paisOrigem = rs.getString("origem");
-                LocalDate anoFundacao = LocalDate.parse(rs.getString("data_Lancamento"));
+                LocalDate anoFundacao = LocalDate.parse(rs.getString("data_lancamento"));
 
                 // Popular o objeto jogo com os dados
                 estudio.setId(id);
-                estudio.setNomeEstudio(nomeEstudio);
+                estudio.setNome(nomeEstudio);
                 estudio.setNomeFundador(nomeFundador);
                 estudio.setPaisOrigem(paisOrigem);
                 estudio.setAnoFundacao(anoFundacao);
