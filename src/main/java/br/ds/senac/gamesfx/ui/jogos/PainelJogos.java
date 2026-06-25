@@ -82,11 +82,11 @@ public class PainelJogos {
         colunaPlataforma.setResizable(false);
 
         TableColumn<Jogo, String> colunaEstudio = new TableColumn("Estúdio");
-        colunaPlataforma.setCellValueFactory(new PropertyValueFactory<>("estudio"));
-        colunaPlataforma.setStyle("-fx-text-fill:#D8C79A;");
-        colunaPlataforma.setPrefWidth(200);
-        colunaPlataforma.setMaxWidth(200);
-        colunaPlataforma.setResizable(false);
+        colunaEstudio.setCellValueFactory(new PropertyValueFactory<>("estudio"));
+        colunaEstudio.setStyle("-fx-text-fill:#D8C79A;");
+        colunaEstudio.setPrefWidth(200);
+        colunaEstudio.setMaxWidth(200);
+        colunaEstudio.setResizable(false);
 
 
     //import dos dados da tabela================================================================\\
@@ -97,13 +97,8 @@ public class PainelJogos {
 
 
         tabelaJogos.getColumns().addAll(colunaId,colunaTitulo, colunaPlataforma, colunaEstudio);
-        tabelaJogos.setStyle(
-
-                        "-fx-background-color: #23272A;" +
-                                "-fx-control-inner-background: #23272A;" +
-                                "-fx-table-cell-border-color: transparent;"
-
-);
+        tabelaJogos.setStyle("-fx-background-color: #23272A;" +"-fx-control-inner-background: #23272A;" +
+"-fx-table-cell-border-color: transparent;");
 
 
         HBox botoes = new HBox(30);
@@ -111,9 +106,8 @@ public class PainelJogos {
         botoes.setAlignment(Pos.BASELINE_RIGHT);
 
         Button btnAdd =  criarBotao("Adicionar", "/imagens/save.png");
-
         btnAdd.setOnAction(e->{
-            TelaJogo telaJogo = new TelaJogo();
+            TelaJogo telaJogo = new TelaJogo("cadastrar");
             telaJogo.criarTela(stage);
             tabelaJogos.setItems(repository.getJogos());
         });
@@ -121,14 +115,21 @@ public class PainelJogos {
 
 
         Button btnView =  criarBotao("Ver", "/imagens/view.png");
+        btnView.setOnAction(e ->{
+        Jogo visualizarJogo  = tabelaJogos.getSelectionModel().getSelectedItem();
+        alerta(visualizarJogo);
+        TelaJogo telaJogo1 = new TelaJogo(visualizarJogo,"visualizar");
 
-
+        telaJogo1.criarTela(stage);
+        tabelaJogos.setItems(repository.getJogos());
+        });
 
         Button btnEdit =  criarBotao("Editar", "/imagens/edit.png");
         btnEdit.setOnAction(e ->{
 
             Jogo editarJogo  = tabelaJogos.getSelectionModel().getSelectedItem();
-            TelaJogo telaJogo = new TelaJogo(editarJogo);
+            alerta(editarJogo);
+            TelaJogo telaJogo = new TelaJogo(editarJogo, "editar");
             telaJogo.criarTela(stage);
             tabelaJogos.setItems(repository.getJogos());
 
@@ -194,5 +195,14 @@ public class PainelJogos {
 
             return botao;
         }
+    public Alert alerta(Jogo jogo){
+       if (jogo == null){
+        Alert alertaJogoNulo = new Alert(Alert.AlertType.WARNING);
 
-}
+        alertaJogoNulo.setTitle("Aviso");
+        alertaJogoNulo.setHeaderText("Nenhum jogo selecionado");
+        alertaJogoNulo.showAndWait();
+        return alertaJogoNulo;
+    }
+    else return null;
+    }}

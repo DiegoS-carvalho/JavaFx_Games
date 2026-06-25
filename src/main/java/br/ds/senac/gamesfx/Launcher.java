@@ -9,9 +9,9 @@ import java.time.LocalDate;
 public class Launcher {
     public static void main(String[] args) {
 //        Application.launch(TelaPrincipal.class, args);
-        Jogo jogo = new Jogo(0,"teste","pla");
-        jogo.setCategoria("fa");
-        jogo.setEstudio("fadada");
+        Jogo jogo = new Jogo(0,"teste",1);
+
+        jogo.setEstudio(1);
         jogo.setPreco(100.00);
         jogo.setDataLancamento(LocalDate.now());
         jogo.setFinalizado(true);

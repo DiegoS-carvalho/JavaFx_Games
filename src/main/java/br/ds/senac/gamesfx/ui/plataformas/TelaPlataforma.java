@@ -29,15 +29,20 @@ public class TelaPlataforma {
         private ComboBox<String> comboFabricante = new ComboBox<String>();
         private DatePicker dpDataPlataforma = new DatePicker();
         private TextField tfpreco = new TextField();
+        private String operacao;
 
         public TelaPlataforma(){}
-        public TelaPlataforma(Plataforma plataforma){
+        public TelaPlataforma(Plataforma plataforma, String operacao){
+            this.operacao = operacao;
             tfId.setText(String.valueOf(plataforma.getId()));
             tfnome.setText(plataforma.getNome());
             comboFabricante.setValue((plataforma.getFabricante()));
             dpDataPlataforma.setValue(plataforma.getDataPlataforma());
             tfpreco.setText(String.valueOf(plataforma.getPreco()));
         }
+    public TelaPlataforma( String operacao){
+            this.operacao = operacao;
+    }
         public void criarTela(Stage stagePai){
             Stage stage = new Stage();
             stage.initOwner(stagePai);
@@ -45,8 +50,13 @@ public class TelaPlataforma {
 
             stage.setMaxWidth(500);
             stage.setHeight(500);
-            stage.setTitle("Cadastro de Jogo");
-
+            if(operacao.equals("cadastrar")){
+                stage.setTitle("Cadastro de Plataforma");}
+            else if (operacao.equals("editar")) {
+                stage.setTitle("Edição de Plataforma");
+            } else if (operacao.equals("visualizar")) {
+                stage.setTitle("Visualização de Plataforma");
+            }
             BorderPane raiz = new BorderPane();
             raiz.setTop(criarPainelTitulo());
             raiz.setCenter(criarFormulario());
@@ -69,17 +79,39 @@ public class TelaPlataforma {
 //        painelTitulo.set
             painelTitulo.setAlignment(Pos.CENTER_LEFT);
 
-            Image image = new Image(getClass().getResourceAsStream("/imagens/save.png"));
-            ImageView imageView = new ImageView(image);
+            ImageView imageView = null;
+            Label lblTitulo = null;
+            switch (operacao) {
+                case "cadastrar":
+                    imageView = new ImageView(new Image(getClass().getResourceAsStream("/imagens/save.png")));
+                    lblTitulo = new Label("Cadastro de Plataforma");
+                    imageView.setFitWidth(40);
+                    imageView.setFitHeight(40);
+                    lblTitulo.setStyle( "-fx-font-size: 28; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-text-fill:#C2B98A;");
+                    break;
 
-            imageView.setFitWidth(40);
-            imageView.setFitHeight(40);
+                case "editar":
+                    imageView = new ImageView(new Image(getClass().getResourceAsStream("/imagens/edit.png")));
+                    lblTitulo = new Label("Edição de Plataforma");
+                    imageView.setFitWidth(40);
+                    imageView.setFitHeight(40);
+                    lblTitulo.setStyle( "-fx-font-size: 28; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-text-fill:#C2B98A;");
+                    break;
 
-            Label lblTitulo = new Label("Cadastro de Jogos");
-
-            lblTitulo.setStyle( "-fx-font-size: 28; " +
-                    "-fx-font-weight: bold; " +
-                    "-fx-text-fill:#C2B98A;");
+                case "visualizar":
+                    imageView = new ImageView(new Image(getClass().getResourceAsStream("/imagens/view.png")));
+                    lblTitulo = new Label("Visualização de Plataforma");
+                    imageView.setFitWidth(40);
+                    imageView.setFitHeight(40);
+                    lblTitulo.setStyle( "-fx-font-size: 28; " +
+                            "-fx-font-weight: bold; " +
+                            "-fx-text-fill:#C2B98A;");
+                    break;
+            }
             painelTitulo.getChildren().addAll(imageView,lblTitulo);
 
             return painelTitulo;
@@ -138,6 +170,22 @@ public class TelaPlataforma {
 
 //====================================================================================================
 
+            if (operacao.equals("visualizar")) {
+                tfId.setDisable(true);
+                tfnome.setDisable(true);
+                tfpreco.setDisable(true);
+                dpDataPlataforma.setDisable(true);
+                comboFabricante.setDisable(true);
+
+
+                formulario.getChildren().addAll(gridFormulario);
+                return  formulario;
+            } else if (operacao.equals("") || operacao == null) {
+                formulario.getChildren().addAll(gridFormulario);
+
+
+                return  formulario;
+            }
 
             formulario.getChildren().addAll(gridFormulario);
 
@@ -205,21 +253,21 @@ public class TelaPlataforma {
                         stage.close();
                     }
 
-
-//                }else{
-//                    plataforma.setId(Integer.parseInt(tfId.getText()));
-//                    repository.editar(plataforma);
-//
-//                    Alert mensagemEditar = new Alert(Alert.AlertType.INFORMATION);
-//                    mensagemEditar.setTitle("Editar Jogo");
-//                    mensagemEditar.setHeaderText("o jogo foi editado com sucesso");
-//                    mensagemEditar.showAndWait();
-//
-//                    stage.close();
-//
                 }
                 limparCampos();
             });
+            if (operacao.equals("visualizar")) {
+
+                rodape.setPrefHeight(70); // ocupa altura
+                rodape.setPrefWidth(200);  // ocupa largura
+
+                return rodape;
+            } else if (operacao.equals("") || operacao == null) {
+
+
+                rodape.getChildren().addAll(btnSalvar, btnApagar);
+                return rodape;
+            }
             rodape.getChildren().addAll(btnSalvar, btnApagar);
             return rodape;
         }

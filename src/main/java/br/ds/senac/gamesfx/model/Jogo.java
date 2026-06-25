@@ -5,14 +5,15 @@ import java.time.LocalDate;
 public class Jogo {
     private int id;
     private String titulo;
-    private String plataforma;
-    private String estudio;
-    private String categoria;
+    private int plataforma;
+    private String nomePlataforma;
+    private int estudio;
+    private String nomeEstudio;
     private double preco;
     private LocalDate DataLancamento;
     private boolean finalizado;
 
-    public Jogo(int id, String titulo, String plataforma){
+    public Jogo(int id, String titulo, int plataforma){
         this.id = id;
         this.titulo = titulo;
         this.plataforma = plataforma;
@@ -57,18 +58,18 @@ public class Jogo {
     }
 // ===========================================================\\
 
-    public String getEstudio() {
+    public int getEstudio() {
         return estudio;
     }
 
-    public void setEstudio(String estudio) {
+    public void setEstudio(int estudio) {
         this.estudio = estudio;
     }
 //===========================================================\\
-    public String getPlataforma() {
+    public int getPlataforma() {
         return plataforma;
     }
-    public void setPlataforma(String plataforma) {
+    public void setPlataforma(int plataforma) {
         this.plataforma = plataforma;
     }
 //===========================================================\\
@@ -81,13 +82,7 @@ public class Jogo {
         this.finalizado = finalizado;
     }
 //===========================================================\\
-    public String getCategoria() {
-        return categoria;
-    }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
 
 
 }

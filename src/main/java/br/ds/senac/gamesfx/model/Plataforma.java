@@ -42,4 +42,8 @@ public class Plataforma {
         this.dataPlataforma = dataplataforma;
         this.preco = preco;
     }
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

@@ -52,7 +52,7 @@ public class PlataformaRepository {
     public void salvar(Plataforma plataforma ){
 
         //Instrução sql para cadastrar um novo jogo no db
-        String sql = "INSERT INTO tb_plataformas (nome, fabricante, data_plataforma,preco" +
+        String sql = "INSERT INTO tb_plataformas (nome, fabricante, data_plataforma,preco) " +
                 "VALUES(?,?,?,?)";
         //Preparar a instrução sql para o db através da conexão,
         try {
@@ -72,39 +72,48 @@ public class PlataformaRepository {
         }
     }
 
-//    public int excluir(int id) {
-//        return 0;
-//    }
-//
-//    public void editar(Jogo jogo) {
-//        String sql =
-//                "UPDATE tb_games SET" +
-//                        " titulo = ?," +
-//                        "plataforma = ?," +
-//                        "estudio = ?," +
-//                        "categoria = ?," +
-//                        "preco = ?," +
-//                        "data_lancamento = ?," +
-//                        "finalizado = ?" +
-//                        " WHERE  id = ?;";
-//
-//        try {
-//            PreparedStatement stm = ConexaoSQLite.getConexao().prepareStatement(sql);
-//            stm.setString(1, jogo.getTitulo());
-//            stm.setString(2, jogo.getPlataforma());
-//            stm.setString(3, jogo.getEstudio());
-//            stm.setString(4, jogo.getCategoria());
-//            stm.setDouble(5, jogo.getPreco());
-//            stm.setString(6, jogo.getDataLancamento().toString());
-//            stm.setInt(7, jogo.isFinalizado() ? 1 : 0);
-//            stm.setInt(8,jogo.getId());
-//            stm.executeUpdate();
-//            ConexaoSQLite.fecharConexao();
-//        } catch (SQLException erro) {
-//            System.out.println("Ocorreu um erro na gravação.");
-//            erro.printStackTrace();
-//        }
+    public int excluirPlataforma(int id) {
+
+            String sql = "DELETE FROM tb_plataformas WHERE id = ?";
+
+            try {
+                PreparedStatement stm = ConexaoSQLite
+                        .getConexao().
+                        prepareStatement(sql);
+                stm.setInt(1,id);
+                int resultado = stm.executeUpdate();
+
+                ConexaoSQLite.fecharConexao();
+
+                return resultado;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return 0;
+            }
+        }
+
+
+    public void editar(Plataforma plataforma) {
+        String sql =
+                "UPDATE tb_plataformas SET" +
+                        " nome = ?," +
+                        "fabricante = ?," +
+                        "data_plataforma = ?," +
+                        "preco = ?," +
+                        " WHERE  id = ?";
+
+        try {
+            PreparedStatement stm = ConexaoSQLite.getConexao().prepareStatement(sql);
+            stm.setString(1, plataforma.getNome());
+            stm.setString(2, plataforma.getFabricante());
+            stm.setString(3, plataforma.getDataPlataforma().toString());
+            stm.setDouble(4, plataforma.getPreco());
+            stm.setInt(5,plataforma.getId());
+            stm.executeUpdate();
+            ConexaoSQLite.fecharConexao();
+        } catch (SQLException erro) {
+            System.out.println("Ocorreu um erro na gravação.");
+            erro.printStackTrace();
+        }
     }
-//}
-
-
+}

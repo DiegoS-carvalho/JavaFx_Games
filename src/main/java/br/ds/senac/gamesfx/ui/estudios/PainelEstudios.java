@@ -3,7 +3,9 @@ package br.ds.senac.gamesfx.ui.estudios;
 import br.ds.senac.gamesfx.data.repository.EstudioRepository;
 import br.ds.senac.gamesfx.model.Estudio;
 import br.ds.senac.gamesfx.model.Jogo;
+import br.ds.senac.gamesfx.model.Plataforma;
 import br.ds.senac.gamesfx.ui.jogos.TelaJogo;
+import br.ds.senac.gamesfx.ui.plataformas.TelaPlataforma;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -84,28 +86,89 @@ public PainelEstudios(Stage stage) {this.stage = stage;}
         Button btnAdd =  criarBotao("Adicionar", "/imagens/save.png");
 
         btnAdd.setOnAction(e->{
-
+            TelaEstudios telaEstudios = new TelaEstudios("cadastrar");
+            telaEstudios.criarTela(stage);
+            tabelaEstudios.setItems(repository.getEstudios());
         });
 
         Button btnView =  criarBotao("Ver", "/imagens/view.png");
+        btnView.setOnAction(e ->{
+            Estudio visualizarEstudio  = tabelaEstudios.getSelectionModel().getSelectedItem();
+            alerta(visualizarEstudio);
+            TelaEstudios telaEstudios1 = new TelaEstudios(visualizarEstudio,"visualizar");
+
+            telaEstudios1.criarTela(stage);
+            tabelaEstudios.setItems(repository.getEstudios());
+        });
+
 
         Button btnEdit =  criarBotao("Editar", "/imagens/edit.png");
         btnEdit.setOnAction(e ->{
 
+
+            Estudio EditarEstudios  = tabelaEstudios.getSelectionModel().getSelectedItem();
+            TelaEstudios telaEstudios = new TelaEstudios(EditarEstudios,"cadastrar");
+            alerta(EditarEstudios);
+            telaEstudios.criarTela(stage);
+            tabelaEstudios.setItems(repository.getEstudios());
+
+
         });
+
 
         Button btnApagar =  criarBotao("Deletar", "/imagens/trash1.png");
         btnApagar.setOnAction(e-> {
+            Estudio EstudioExcluir = tabelaEstudios.getSelectionModel().getSelectedItem();
 
 
-            });
+            if(EstudioExcluir == null){
+                Alert alertaEstudioNulo = new Alert(Alert.AlertType.WARNING);
 
+                alertaEstudioNulo.setTitle("Exclusão de Estúdio");
+                alertaEstudioNulo.setHeaderText("selecione um Estúdio para realizar a exclusão");
+                alertaEstudioNulo.showAndWait();
+                return;
+            }
+
+
+            Alert confirmaExclusao = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmaExclusao.setTitle("Exclusão de Estúdio");
+            confirmaExclusao.setHeaderText("Você está excluindo uma Estúdio");
+            confirmaExclusao.setContentText("deseja continuar?");
+
+            Optional<ButtonType> resposta = confirmaExclusao.showAndWait();
+            ButtonType botaoSelecionado = resposta.get();
+
+
+            if(botaoSelecionado == ButtonType.OK){
+
+                repository.excluirEstudio(EstudioExcluir.getId());
+                tabelaEstudios.setItems(repository.getEstudios());
+            }
+//                    if (resultado > 0) {
+//            JOptionPane.showMessageDialog(null,"Jogo excluido com sucesso");
+//                }
+        });
 
         botoes.getChildren().addAll(btnAdd,btnView,btnEdit,btnApagar);
         //========================================================================================\\
         painelEstudios.getChildren().addAll(lblTitulo,new Separator(), tabelaEstudios,botoes);
         return painelEstudios;
     }
+
+
+        public Alert alerta(Estudio estudio){
+            if (estudio == null){
+                Alert alertaJogoNulo = new Alert(Alert.AlertType.WARNING);
+
+                alertaJogoNulo.setTitle("Aviso");
+                alertaJogoNulo.setHeaderText("Nenhum estudio selecionado");
+                alertaJogoNulo.showAndWait();
+                return alertaJogoNulo;
+            }
+            else return null;
+}
+
     private Button criarBotao(String textoBotao, String urlImg){
         Image image = new Image(getClass().getResourceAsStream(urlImg));
         ImageView imageView = new ImageView(image);
@@ -125,28 +188,6 @@ public PainelEstudios(Stage stage) {this.stage = stage;}
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

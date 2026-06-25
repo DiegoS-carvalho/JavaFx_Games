@@ -1,8 +1,11 @@
 package br.ds.senac.gamesfx.ui.plataformas;
 
 import br.ds.senac.gamesfx.data.repository.PlataformaRepository;
+import br.ds.senac.gamesfx.model.Estudio;
 import br.ds.senac.gamesfx.model.Jogo;
 import br.ds.senac.gamesfx.model.Plataforma;
+import br.ds.senac.gamesfx.ui.estudios.TelaEstudios;
+import br.ds.senac.gamesfx.ui.jogos.TelaJogo;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -14,6 +17,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Optional;
 
 
 public class PainelPlataformas {
@@ -62,12 +66,6 @@ public class PainelPlataformas {
         colunaFabricante.setMaxWidth(200);
         colunaFabricante.setResizable(false);
 
-//        TableColumn<Plataforma, String> colunaPlataforma = new TableColumn("PLATAFORMA");
-//        colunaPlataforma.setCellValueFactory(new PropertyValueFactory<>("plataforma"));
-//        colunaPlataforma.setStyle("-fx-text-fill:#D8C79A;");
-//        colunaPlataforma.setPrefWidth(200);
-//        colunaPlataforma.setMaxWidth(200);
-//        colunaPlataforma.setResizable(false);
 
         PlataformaRepository repository = new PlataformaRepository();
         tabelaPlataformas.setItems(repository.getPlataformas());
@@ -88,17 +86,30 @@ public class PainelPlataformas {
         botoes.setAlignment(Pos.BASELINE_RIGHT);
 
         Button btnAdd =  criarBotao("Adicionar", "/imagens/save.png");
-
         btnAdd.setOnAction(e->{
-
+            TelaPlataforma telaPlataforma = new TelaPlataforma("cadastrar");
+            telaPlataforma.criarTela(stage);
+            tabelaPlataformas.setItems(repository.getPlataformas());
         });
 
         Button btnView =  criarBotao("Ver", "/imagens/view.png");
+        btnView.setOnAction(e ->{
+            Plataforma visualizarPlataforma  = tabelaPlataformas.getSelectionModel().getSelectedItem();
+            alerta(visualizarPlataforma);
+            TelaPlataforma telaPlataforma1 = new TelaPlataforma(visualizarPlataforma,"visualizar");
+
+            telaPlataforma1.criarTela(stage);
+            tabelaPlataformas.setItems(repository.getPlataformas());
+        });
 
         Button btnEdit =  criarBotao("Editar", "/imagens/edit.png");
         btnEdit.setOnAction(e ->{
 
-
+            Plataforma editarPlataforma  = tabelaPlataformas.getSelectionModel().getSelectedItem();
+            alerta(editarPlataforma);
+            TelaPlataforma telaPlataforma = new TelaPlataforma(editarPlataforma,"editar");
+            telaPlataforma.criarTela(stage);
+            tabelaPlataformas.setItems(repository.getPlataformas());
 
 
         });
@@ -106,9 +117,39 @@ public class PainelPlataformas {
 
         Button btnApagar =  criarBotao("Deletar", "/imagens/trash1.png");
         btnApagar.setOnAction(e-> {
+            Plataforma PlataformaExcluir = tabelaPlataformas.getSelectionModel().getSelectedItem();
 
 
+            if(PlataformaExcluir == null){
+                Alert alertaPlataformaNulo = new Alert(Alert.AlertType.WARNING);
+
+                alertaPlataformaNulo.setTitle("Exclusão de Plataforma");
+                alertaPlataformaNulo.setHeaderText("selecione uma Plataforma para realizar a exclusão");
+                alertaPlataformaNulo.showAndWait();
+                return;
+            }
+
+
+            Alert confirmaExclusao = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmaExclusao.setTitle("Exclusão de Plataforma");
+            confirmaExclusao.setHeaderText("Você está excluindo uma Plataforma");
+            confirmaExclusao.setContentText("deseja continuar?");
+
+            Optional<ButtonType> resposta = confirmaExclusao.showAndWait();
+            ButtonType botaoSelecionado = resposta.get();
+
+
+            if(botaoSelecionado == ButtonType.OK){
+
+                repository.excluirPlataforma(PlataformaExcluir.getId());
+                tabelaPlataformas.setItems(repository.getPlataformas());
+            }
+//                    if (resultado > 0) {
+//            JOptionPane.showMessageDialog(null,"Jogo excluido com sucesso");
+//                }
         });
+
+
 
 
         botoes.getChildren().addAll(btnAdd,btnView,btnEdit,btnApagar);
@@ -131,5 +172,16 @@ public class PainelPlataformas {
         botao.setContentDisplay(ContentDisplay.TOP);
 
         return botao;
+    }
+    public Alert alerta(Plataforma plataforma){
+        if (plataforma == null){
+            Alert alertaJogoNulo = new Alert(Alert.AlertType.WARNING);
+
+            alertaJogoNulo.setTitle("Aviso");
+            alertaJogoNulo.setHeaderText("Nenhuma plataforma selecionado");
+            alertaJogoNulo.showAndWait();
+            return alertaJogoNulo;
+        }
+        else return null;
     }
 }

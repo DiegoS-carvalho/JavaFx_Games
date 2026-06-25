@@ -2,10 +2,10 @@ package br.ds.senac.gamesfx.ui.jogos;
 
 import br.ds.senac.gamesfx.data.repository.EstudioRepository;
 import br.ds.senac.gamesfx.data.repository.JogoRepository;
+import br.ds.senac.gamesfx.data.repository.PlataformaRepository;
 import br.ds.senac.gamesfx.model.Estudio;
 import br.ds.senac.gamesfx.model.Jogo;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import br.ds.senac.gamesfx.model.Plataforma;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,7 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -28,22 +27,28 @@ public class TelaJogo {
     private TextField tfId = new TextField();
     private TextField tfTitulo = new TextField();
     private TextField tfValor = new TextField();
-    private ComboBox<String> comboPlataforma = new ComboBox<>();
+    private ComboBox<Plataforma> comboPlataforma = new ComboBox<>();
     private ComboBox<Estudio> comboEstudio = new ComboBox<>();
     private DatePicker dpDataLancamento = new DatePicker();
     private CheckBox cbFinalizado = new CheckBox("Finalizado");
     EstudioRepository repoEstudio = new EstudioRepository();
+    PlataformaRepository repoPlataforma = new PlataformaRepository();
+    private String operacao;
+
 
 public  TelaJogo(){}
-    public TelaJogo(Jogo jogo){
+
+    public TelaJogo(Jogo jogo, String operacao){
+        this.operacao = operacao;
     tfId.setText(String.valueOf(jogo.getId()));
     tfTitulo.setText(jogo.getTitulo());
     tfValor.setText(String.valueOf(jogo.getPreco()));
-    comboPlataforma.setValue(jogo.getPlataforma());
+    comboPlataforma.setItems(repoPlataforma.getPlataformas());
     comboEstudio.setItems(repoEstudio.getEstudios());
     dpDataLancamento.setValue(jogo.getDataLancamento());
     cbFinalizado.setSelected(jogo.isFinalizado());
     }
+    public TelaJogo(String operacao){this.operacao = operacao;}
     public void criarTela(Stage stagePai){
         Stage stage = new Stage();
         stage.initOwner(stagePai);
@@ -51,7 +56,13 @@ public  TelaJogo(){}
 
         stage.setMaxWidth(500);
         stage.setHeight(500);
-        stage.setTitle("Cadastro de Jogo");
+        if(operacao.equals("cadastrar")){
+            stage.setTitle("Cadastro de Jogo");}
+        else if (operacao.equals("editar")) {
+            stage.setTitle("Edição de Jogo");
+        } else if (operacao.equals("visualizar")) {
+            stage.setTitle("Visualização de Jogo");
+        }
 
         BorderPane raiz = new BorderPane();
         raiz.setTop(criarPainelTitulo());
@@ -73,29 +84,50 @@ public  TelaJogo(){}
         painelTitulo.setPadding(new Insets (20,0,20,20));
         painelTitulo.setStyle("-fx-background-color:#2F3336; ");
 //        painelTitulo.set
+
         painelTitulo.setAlignment(Pos.CENTER_LEFT);
+        ImageView imageView = null;
+        Label lblTitulo = null;
+        switch (operacao) {
+            case "cadastrar":
+                imageView = new ImageView(new Image(getClass().getResourceAsStream("/imagens/save.png")));
+                lblTitulo = new Label("Cadastro de Jogos");
+                imageView.setFitWidth(40);
+                imageView.setFitHeight(40);
+                lblTitulo.setStyle( "-fx-font-size: 28; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-text-fill:#C2B98A;");
+                break;
 
-        Image image = new Image(getClass().getResourceAsStream("/imagens/save.png"));
-        ImageView imageView = new ImageView(image);
+            case "editar":
+                imageView = new ImageView(new Image(getClass().getResourceAsStream("/imagens/edit.png")));
+                lblTitulo = new Label("Edição de Jogo");
+                imageView.setFitWidth(40);
+                imageView.setFitHeight(40);
+                lblTitulo.setStyle( "-fx-font-size: 28; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-text-fill:#C2B98A;");
+                break;
 
-        imageView.setFitWidth(40);
-        imageView.setFitHeight(40);
+            case "visualizar":
+                imageView = new ImageView(new Image(getClass().getResourceAsStream("/imagens/view.png")));
+                lblTitulo = new Label("Visualização de Jogos");
+                imageView.setFitWidth(40);
+                imageView.setFitHeight(40);
+                lblTitulo.setStyle( "-fx-font-size: 28; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-text-fill:#C2B98A;");
+                break;
+        }
 
-        Label lblTitulo = new Label("Cadastro de Jogos");
 
-        lblTitulo.setStyle( "-fx-font-size: 28; " +
-                "-fx-font-weight: bold; " +
-                "-fx-text-fill:#C2B98A;");
         painelTitulo.getChildren().addAll(imageView,lblTitulo);
 
         return painelTitulo;
     }
     private VBox criarFormulario(){
 
-        ObservableList<String> plataformas = FXCollections
-                .observableArrayList(
-                        "PlayStation 1", "PlayStation 2", "PlayStation 3", "PlayStation 4", "PlayStation 5", "Xbox", "Xbox 360", "Xbox One", "Xbox Series X", "Xbox Series S", "NES", "SNES", "Nintendo 64", "GameCube", "Wii", "Wii U", "Nintendo Switch", "Sega Master System", "Sega Mega Drive", "Sega Saturn", "Sega Dreamcast"
-                );
+
 
 
         VBox formulario = new VBox();
@@ -118,7 +150,7 @@ public  TelaJogo(){}
         tfTitulo.setPromptText("Ex. Lego Batman II");
 
         Label lblPlataformas = new Label("Plataforma: ");
-        comboPlataforma.setItems(plataformas);
+        comboPlataforma.setItems(repoPlataforma.getPlataformas());
 
         Label lblEstudios = new Label("Estudio: ");
         comboEstudio.setItems(repoEstudio.getEstudios());
@@ -146,6 +178,25 @@ public  TelaJogo(){}
         gridFormulario.add(lblLancamento,0,5);
         gridFormulario.add(dpDataLancamento,1,5);
         gridFormulario.add(cbFinalizado,1,6);
+
+        if (operacao.equals("visualizar")) {
+            tfId.setDisable(true);
+            tfTitulo.setDisable(true);
+            tfValor.setDisable(true);
+            comboPlataforma.setDisable(true);
+            comboEstudio.setDisable(true);
+            dpDataLancamento.setDisable(true);
+            cbFinalizado.setDisable(true);
+
+            formulario.getChildren().addAll(gridFormulario);
+            return  formulario;
+        } else if (operacao.equals("") || operacao == null) {
+            formulario.getChildren().addAll(gridFormulario);
+
+            formulario.getChildren().addAll(gridFormulario);
+            return  formulario;
+        }
+
 //====================================================================================================
 
 
@@ -174,34 +225,34 @@ public  TelaJogo(){}
 
         return botao;
     }
-    private HBox criarRodape(Stage stage){
+    private HBox criarRodape(Stage stage) {
 
         HBox rodape = new HBox();
-        rodape.setPadding(new Insets (10,5,10,10));
+        rodape.setPadding(new Insets(10, 5, 10, 10));
         rodape.setStyle("-fx-background-color:#6B6D70 ; ");
 
-        Button btnSalvar = criarBotao("salvar","/imagens/save.png");
+        Button btnSalvar = criarBotao("salvar", "/imagens/save.png");
         btnSalvar.setTooltip(new Tooltip("Salvar"));
-        Button btnApagar = criarBotao("Apagar","/imagens/trash1.png");
+        Button btnApagar = criarBotao("Apagar", "/imagens/trash1.png");
         btnApagar.setTooltip(new Tooltip("Apagar"));
         rodape.setAlignment(Pos.BASELINE_RIGHT);
 
         rodape.setSpacing(10);
         btnSalvar.setTooltip(new Tooltip("Salvar dados do jogo"));
 
-        btnSalvar.setOnAction(evento ->{
+        btnSalvar.setOnAction(evento -> {
             Jogo jogo = new Jogo();
             jogo.setTitulo(tfTitulo.getText());
-            jogo.setPlataforma(comboPlataforma.getValue());
-            jogo.setEstudio(comboEstudio.getValue().getNome());
+            jogo.setPlataforma(comboPlataforma.getValue().getId());
+            jogo.setEstudio(comboEstudio.getValue().getId());
             jogo.setDataLancamento(dpDataLancamento.getValue());
-            jogo.setCategoria("Jogo");
+
             jogo.setFinalizado(cbFinalizado.isSelected());
             jogo.setPreco(Double.parseDouble(tfValor.getText()));
 
             // Criar o repositório para enviar o jogo
             JogoRepository repository = new JogoRepository();
-            if (tfId.getText().equals("")){
+            if (tfId.getText().equals("")) {
                 repository.salvar(jogo);
 
                 Alert mensagemSalvar = new Alert(Alert.AlertType.CONFIRMATION);
@@ -211,15 +262,15 @@ public  TelaJogo(){}
 
                 Optional<ButtonType> escolhaCadastra = mensagemSalvar.showAndWait();
 
-                if(escolhaCadastra.get() == ButtonType.OK){
+                if (escolhaCadastra.get() == ButtonType.OK) {
                     limparCampos();
 
-                }else {
+                } else {
                     stage.close();
                 }
 
 
-            }else{
+            } else {
                 jogo.setId(Integer.parseInt(tfId.getText()));
                 repository.editar(jogo);
 
@@ -228,11 +279,23 @@ public  TelaJogo(){}
                 mensagemEditar.setHeaderText("o jogo foi editado com sucesso");
                 mensagemEditar.showAndWait();
 
-                    stage.close();
+                stage.close();
 
             }
-                limparCampos();
+            limparCampos();
         });
+        if (operacao.equals("visualizar")) {
+
+            rodape.setPrefHeight(70); // ocupa altura
+            rodape.setPrefWidth(200);  // ocupa largura
+
+            return rodape;
+        } else if (operacao.equals("") || operacao == null) {
+
+
+            rodape.getChildren().addAll(btnSalvar, btnApagar);
+            return rodape;
+        }
         rodape.getChildren().addAll(btnSalvar, btnApagar);
         return rodape;
     }
@@ -241,9 +304,11 @@ public  TelaJogo(){}
         tfTitulo.clear();
         tfValor.clear();
         comboEstudio.setItems(null);
-        comboPlataforma.setValue(" ");
+        comboPlataforma.setItems(null);
         cbFinalizado.setSelected(false);
         dpDataLancamento.setValue(LocalDate.now());
         tfTitulo.requestFocus();
     }
+
+
 }

@@ -55,5 +55,9 @@ public class Estudio {
     public void setPaisOrigem(String paisOrigem) {
         this.paisOrigem = paisOrigem;
     }
+    @Override
+    public String toString() {
+        return nome;
+    }
 }
 
